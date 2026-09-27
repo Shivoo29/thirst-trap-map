@@ -106,7 +106,7 @@ python heat_relief.py     # matching; writes extra/hrn_matched.csv and extra/hrn
 python audit_results.py   # final classes from the audited sheet; all tables and tests in section 2
 ```
 
-The repository includes the audited sheet (`extra/hrn_audit.csv`, with an OpenStreetMap link per site for re-checking) and the layer snapshot (`extra/hrn.geojson`). Code: ⟨REPO LINK⟩
+The repository includes the audited sheet (`extra/hrn_audit.csv`, with an OpenStreetMap link per site for re-checking) and the layer snapshot (`extra/hrn.geojson`). Code: https://github.com/Shivoo29/thirst-trap-map
 
 ## 6. Limitations
 - **Coverage over time.** The HRN layer is a live service; sites can change within a season. The copy used here was retrieved on 2026-09-27. The season opened on May 1, 2026, and the Overture release is dated 2026-08-19.
