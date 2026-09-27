@@ -2,7 +2,7 @@
 
 **Maricopa's heat-relief hydration stations are missing from Overture twice as often as its cooling centers, and no heat-relief site can be identified as one**
 
-Zindi user: Shivoo29. Scored submission: fJzXLpZM (challenge data only). This entry is for Best Bias Discovery. It uses one additional public dataset, documented in section 5.
+Zindi user: Shivoo29. Entry submission: WBtd768Q (challenge data only). This entry is for Best Bias Discovery. It uses one additional public dataset, documented in section 5.
 
 ## Summary
 

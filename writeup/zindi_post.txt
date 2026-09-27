@@ -1,0 +1,70 @@
+Best Bias Discovery: where the water is, the map is not. Maricopa's heat-relief hydration stations are missing from Overture twice as often as its cooling centers
+
+ENTRY
+Zindi user: Shivoo29. Entry submission: WBtd768Q (challenge data only). This post is my entry for Best Bias Discovery.
+Full writeup: https://github.com/Shivoo29/thirst-trap-map/blob/main/writeup/bias_discovery.md
+Code, audited data and sources: https://github.com/Shivoo29/thirst-trap-map
+
+SUMMARY
+Maricopa County recorded 645 heat-related deaths in 2023, 608 in 2024 and 430 in 2025. About three quarters happened outdoors, and people experiencing homelessness were the largest group each year (45%, 49%, 49%). The county's response is the Heat Relief Network (HRN): indoor cooling centers, respite centers, and hydration stations where people who are outside can get water. I checked all 238 heat-relief sites in the network's public layer against Overture places (release 2026-08-19.0) and audited every non-identical match by hand.
+
+- Hydration stations are the least mapped. 28.8% of them (38 of 132) are absent from Overture, against 14.2% (15 of 106) of cooling and respite centers. That is twice the rate (Fisher exact p = 0.008; 0.023 after Bonferroni for the three comparisons I tested).
+- In tracts in the top SVI quartile, 16 of 41 hydration stations (39%) are absent, against 24% elsewhere. This is suggestive, not significant after correction.
+- No heat-relief site can be identified as one. Overture's places taxonomy has no cooling-center, heat-relief or hydration category, and the place schema has no opening-hours field.
+
+1. THE PATTERN THE SCORECARD DOES NOT SURFACE
+- The scorecard's facility terms (fire stations, EMS stations, schools and business establishments) do not include any facility that responds to heat, which kills hundreds of people a year here.
+- The scorecard's summer-heat stratum reads 0.59: heat-exposed tracts have gaps 41% smaller. Inside the heat-response layer, the sites built for people who are outdoors are the ones missing.
+- The disparity is between two kinds of heat-relief site in the same tracts and cities, a stratum the tract-level strata cannot express.
+
+2. EVIDENCE
+Data:
+- the MAG Heat Relief Network public layer: 238 heat-relief sites, snapshot retrieved 2026-09-27, included in the repository;
+- maricopa-az-overture-pois.parquet;
+- maricopa-az-census-tracts.parquet and maricopa-az-strata-tract-table.parquet.
+
+Method:
+- Every Overture place within 150 m of each site is a candidate. Names are compared as token sets, with the city name and generic words removed.
+- 89 identical-name matches are accepted automatically. The other 149 were audited by hand, with a verdict and reason per site in extra/hrn_audit.csv.
+- Final classes: found by its own name / found only under an operator, system or former name / absent.
+
+Results (238 sites):
+- Hydration stations (132): 57.6% by name, 13.6% other name, 28.8% absent
+- Cooling centers (93): 67.7% by name, 18.3% other name, 14.0% absent
+- Respite centers (13): 76.9% by name, 7.7% other name, 15.4% absent
+
+Where the missing hydration stations are:
+- City of Phoenix recreation centers (Harmon, Hayden, Verde Park, University Park, Eastlake Park, Holiday Park, Pecos): in each, the park or pool next door is mapped, but not the building with the water and air conditioning.
+- Tract 04013114900 (SVI 0.99, south-central Phoenix), with three absent sites.
+- Recovery and behavioral-health sites: Unhooked Recovery, Sanctuary Recovery Centers, Copa Health Metro Center, and Terros Health's 23rd, 27th and 51st Avenue centers.
+- Faith and community sites: ATR Resource Services, Cleo N Lewis Ministries, St. Joseph the Worker (Mesa).
+
+Even the sites found by name are spread over 29 Overture categories, including french_restaurant for St. Vincent de Paul's Mesa Dining Room.
+
+Tested and not found, reported so judges can weigh the finding:
+- No disparity by operator type after the audit (nonprofit vs government, p = 0.10). The automatic matcher alone had suggested one.
+- No access disparity against high-SVI tracts.
+- Overture confidence and operating_status do not explain it.
+
+Sensitivity: if a mapped park is taken to lead a user to its recreation center, the hydration gap is 24.2% vs 13.2% (p = 0.033; 0.10 after correction). The direction holds, but significance depends on that choice. I count the building, because that is where the relief is.
+
+3. WHO IS AFFECTED AND WHY IT MATTERS
+- In the county's 2023 cooling-center survey (CDC MMWR 74(14), 2025), the main barriers were "lack of awareness (36% visitors; 49% public), uncertainty of locations (17% visitors; 22% public), and transportation challenges for visitors (31%)". The county then funded a call center "to facilitate location of and transportation to" cooling centers.
+- The public is directed to the HRN web map and to 211 Arizona, whose operators answer 9 a.m. to 7 p.m. Outside those hours, and in any general map app, open map data decides what a search returns.
+- Outreach teams handing out water, and dispatchers taking heat-illness calls, need the nearest open relief site. On open map data, the sites built for people who are outdoors are the most likely to be missing, and no site can be found by its function.
+
+WHAT WOULD CLOSE THE GAP
+- Ingest the HRN layer as an Overture source.
+- Map recreation-center buildings, not only parks.
+- Add a heat-relief category or attribute and opening hours to places.
+- Keep branch names when conflating multi-site operators.
+
+REPRODUCE
+pip install -r requirements.txt, download the three Maricopa challenge files listed in the README, then run:
+- python heat_relief.py
+- python audit_results.py
+All tables and tests in this post come from audit_results.py.
+
+ADDITIONAL SOURCE (Best Bias Discovery only, retrieved 2026-09-27)
+- MAG Heat Relief Network, "HRN Public view": https://services1.arcgis.com/MdyCMZnX1raZ7TS3/arcgis/rest/services/HRN_Public_view/FeatureServer/0 . The layer is public and needs no login. Its item page carries an accuracy disclaimer and no explicit licence, so a snapshot is included for reproducibility because the layer is seasonal.
+- Other sources (MCDPH heat-death reports 2023–2025, CDC MMWR 74(14), Overture schema docs) are listed with URLs in the writeup.
