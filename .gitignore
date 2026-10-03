@@ -2,7 +2,6 @@
 data/
 
 # Leaderboard experiments, not part of the bias-discovery entry
-features.py
 predict.py
 features*.parquet
 subs/
@@ -16,3 +15,5 @@ extra/hrn_matched.csv
 extra/hrn_tract_access.csv
 extra/hrn_final.csv
 __pycache__/
+*.parquet
+SampleSubmission_old.csv
